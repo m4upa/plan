@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Push-Up Counter</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ HOME ============ -->
+<section class="screen active" data-screen="home">
+  <div class="screen-content home-content">
+    <h1 class="app-title">PUSH-UP COUNTER</h1>
+
+    <div class="home-hero">
+      <div class="home-hero-label">PERSONAL BEST</div>
+      <div class="home-hero-number" id="home-personal-best">0</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-card-value" id="home-today-reps">0</div>
+        <div class="stat-card-label">Today's Reps</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="home-total-reps">0</div>
+        <div class="stat-card-label">Total Reps</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="home-sessions">0</div>
+        <div class="stat-card-label">Sessions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="home-streak">0</div>
+        <div class="stat-card-label">🔥 Streak (days)</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-huge" id="start-btn">START</button>
+  </div>
+</section>
+
+<!-- ============ CAMERA CHECK ============ -->
+<section class="screen" data-screen="cameraCheck">
+  <div class="camera-screen">
+    <button class="back-btn" id="camera-check-back">‹ Back</button>
+    <div class="camera-instructions">
+      <p>Place your phone on the floor or a stable surface.</p>
+      <p>Keep your whole body visible.</p>
+      <p>Use a side view for better detection.</p>
+    </div>
+
+    <div class="camera-preview-wrap">
+      <video id="camera-check-video" class="camera-video" playsinline autoplay muted></video>
+    </div>
+
+    <div class="camera-check-list">
+      <div class="check-item"><span class="check-icon" id="check-camera-connected">○</span> Camera connected</div>
+      <div class="check-item"><span class="check-icon" id="check-person-detected">○</span> Person detected</div>
+      <div class="check-item"><span class="check-icon" id="check-body-visible">○</span> Body visible</div>
+      <div class="check-item"><span class="check-icon" id="check-side-view">○</span> Side view detected</div>
+    </div>
+
+    <div class="camera-check-status neutral" id="camera-check-status">Waiting for camera…</div>
+
+    <button class="btn btn-primary btn-huge" id="start-counting-btn" disabled>START COUNTING</button>
+  </div>
+</section>
+
+<!-- ============ COUNTDOWN ============ -->
+<section class="screen" data-screen="countdown">
+  <div class="countdown-screen">
+    <div class="countdown-number pulse" id="countdown-number">3</div>
+  </div>
+</section>
+
+<!-- ============ WORKOUT ============ -->
+<section class="screen" data-screen="workout">
+  <div class="workout-screen">
+    <div class="workout-header">
+      <span class="workout-header-label">PUSH-UPS</span>
+      <span class="workout-timer" id="workout-timer">00:00</span>
+    </div>
+
+    <div class="workout-camera-wrap">
+      <video id="workout-video" class="camera-video" playsinline autoplay muted></video>
+      <canvas id="workout-overlay" class="overlay-canvas"></canvas>
+
+      <div class="pause-overlay" id="pause-overlay">
+        <div class="pause-overlay-text">PAUSED</div>
+        <button class="btn btn-primary" id="resume-btn">RESUME</button>
+      </div>
+    </div>
+
+    <div class="workout-footer">
+      <div class="rep-count" id="rep-count">0</div>
+      <div class="form-feedback feedback-good" id="form-feedback">GOOD FORM</div>
+      <div class="workout-buttons">
+        <button class="btn btn-secondary" id="pause-btn">PAUSE</button>
+        <button class="btn btn-danger" id="stop-btn">STOP</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULT ============ -->
+<section class="screen" data-screen="result">
+  <div class="screen-content result-content">
+    <div class="result-record-badge" id="result-record-badge" style="display:none;">NEW PERSONAL BEST</div>
+    <h1 class="result-title">GREAT JOB!</h1>
+
+    <div class="result-main-number" id="result-reps">0</div>
+    <div class="result-main-label">PUSH-UPS</div>
+
+    <div class="result-secondary">
+      <div class="result-secondary-item">
+        <div class="result-secondary-value" id="result-time">00:00</div>
+        <div class="result-secondary-label">TIME</div>
+      </div>
+      <div class="result-secondary-item">
+        <div class="result-secondary-value" id="result-best">0</div>
+        <div class="result-secondary-label">BEST SET</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-huge" id="done-btn">DONE</button>
+  </div>
+</section>
+
+<!-- ============ HISTORY ============ -->
+<section class="screen" data-screen="history">
+  <div class="screen-content">
+    <h1 class="screen-title">HISTORY</h1>
+    <div id="history-list"></div>
+    <div id="history-empty" class="empty-state" style="display:none;">No sessions yet. Start your first workout!</div>
+  </div>
+</section>
+
+<!-- ============ PROGRESS ============ -->
+<section class="screen" data-screen="progress">
+  <div class="screen-content">
+    <h1 class="screen-title">PROGRESS</h1>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-card-value" id="stat-personal-best">0</div>
+        <div class="stat-card-label">Personal Best</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="stat-total-reps">0</div>
+        <div class="stat-card-label">Total Push-ups</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="stat-sessions">0</div>
+        <div class="stat-card-label">Sessions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="stat-current-streak">0</div>
+        <div class="stat-card-label">Current Streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="stat-longest-streak">0</div>
+        <div class="stat-card-label">Longest Streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-value" id="stat-average">0</div>
+        <div class="stat-card-label">Average</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <svg id="progress-chart" class="chart-svg"></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SETTINGS ============ -->
+<section class="screen" data-screen="settings">
+  <div class="screen-content">
+    <h1 class="screen-title">SETTINGS</h1>
+
+    <div class="settings-row">
+      <span>Sound</span>
+      <label class="switch">
+        <input type="checkbox" id="setting-sound" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="settings-row">
+      <span>Vibration</span>
+      <label class="switch">
+        <input type="checkbox" id="setting-vibration" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="settings-row">
+      <span>Camera Mirror</span>
+      <label class="switch">
+        <input type="checkbox" id="setting-mirror" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <button class="btn btn-danger-outline" id="reset-data-btn">Reset Data</button>
+
+    <div class="about-block">
+      <div class="about-title">About</div>
+      <div class="about-text">Push-Up Counter automatically counts your push-ups using your phone's camera. All processing happens locally on your device — no data ever leaves your phone.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ERROR / FALLBACK ============ -->
+<section class="screen" data-screen="error">
+  <div class="screen-content error-content">
+    <div class="error-icon">⚠</div>
+    <div class="error-message" id="error-screen-message">Something went wrong.</div>
+    <div class="error-subtext" id="error-screen-subtext"></div>
+    <button class="btn btn-primary btn-huge" onclick="location.reload()">GO BACK</button>
+  </div>
+</section>
+
+<!-- ============ BOTTOM NAV ============ -->
+<nav id="bottom-nav" class="bottom-nav">
+  <button class="nav-btn active" data-nav="home">
+    <span class="nav-icon">⌂</span><span class="nav-label">Home</span>
+  </button>
+  <button class="nav-btn" data-nav="history">
+    <span class="nav-icon">≡</span><span class="nav-label">History</span>
+  </button>
+  <button class="nav-btn" data-nav="progress">
+    <span class="nav-icon">▲</span><span class="nav-label">Progress</span>
+  </button>
+  <button class="nav-btn" data-nav="settings">
+    <span class="nav-icon">⚙</span><span class="nav-label">Settings</span>
+  </button>
+</nav>
+
+<!-- ============ SCRIPTS (no build step, plain script tags, local only) ============ -->
+<script src="js/config.js"></script>
+<script src="js/StorageManager.js"></script>
+<script src="js/CameraManager.js"></script>
+<script src="js/PoseDetector.js"></script>
+<script src="js/PushUpDetector.js"></script>
+<script src="js/WorkoutSession.js"></script>
+<script src="js/HistoryManager.js"></script>
+<script src="js/StatsManager.js"></script>
+<script src="js/SettingsManager.js"></script>
+<script src="js/UIManager.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
